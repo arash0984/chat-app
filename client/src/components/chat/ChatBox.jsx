@@ -5,15 +5,15 @@ import { ChatContext } from "../../context/ChatContext";
 import { useFetchRecipientUser } from "../../hooks/useFetchRecipient";
 import moment from "moment";
 import InputEmoji from "react-input-emoji";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMagic } from '@fortawesome/free-solid-svg-icons';
 
 const ChatBox = () => {
     const {user} = useContext(AuthContext)
-    const {currentChat, messages, isMessagesLoading, sendTextMessage}
+    const {currentChat, messages, isMessagesLoading, sendTextMessage, get_help_from_gpt}
      = useContext(ChatContext);
     const {recipientUser} = useFetchRecipientUser (currentChat, user);
     const [textMessage, setTextMessage] = useState("")
-
-    console.log("text", textMessage);
 
     if (!recipientUser) return(
         <p style={{ textAlign: "center", width: "100%"}}>
@@ -56,6 +56,9 @@ const ChatBox = () => {
                     frontFamily="nunito"
                     borderColor="rgba(72, 112, 223, 0.2"
                 />
+                <button className="help-btn" onClick={() => get_help_from_gpt(currentChat._id, user?._id, textMessage, setTextMessage)}>
+                    <FontAwesomeIcon icon={faMagic} />
+                </button>
                 <button className="send-btn" onClick={() => sendTextMessage(textMessage, user, currentChat._id, setTextMessage)}>
                     <svg 
                     xmlns="http://www.w3.org/2000/svg" 

@@ -13,7 +13,7 @@ export const ChatContextProvider = ({ children, user }) => {
     const [messages, setMessages] = useState(null)
     const [isMessagesLoading, setIsMessagesLoading] = useState(false)
     const [messagesError, setMessagesError] = useState(null)
-    const [sendTextmessageError, setSendMessageError] = useState(null)
+    const [sendTextmessageError, setSendTextMessageError] = useState(null)
     const [newMessage, setNewMessage] = useState(null)
     const [socket, setSocket] = useState(null);
     const [onlineUsers, setOnlineUsers] = useState([]);
@@ -178,6 +178,14 @@ export const ChatContextProvider = ({ children, user }) => {
      []
      );
 
+    const get_help_from_gpt = useCallback(async (chat_id, user_id, textMessage, setTextMessage) => {
+        try {
+            const response = await postRequest(baseUrl + '/chats/help', JSON.stringify({chat_id, user_id, "message": textMessage}));
+            setTextMessage(response.message);
+        } catch (error) {
+            console.error("Error fetching help message:", error);
+        }
+    })
 
     const updateCurrentChat = useCallback((chat)=>{
         setCurrentChat(chat)
@@ -218,6 +226,7 @@ export const ChatContextProvider = ({ children, user }) => {
                 currentChat,
                 sendTextMessage,
                 onlineUsers,
+                get_help_from_gpt
             }}
         >
             {children}
